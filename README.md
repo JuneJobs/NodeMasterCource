@@ -40,7 +40,7 @@ test
     </html>
 ```
 
-    7. change source code (traceur-compiler.googlecode.com/git) to (google.github.io/traceur-compiler)
+    7. Change source code (traceur-compiler.googlecode.com/git) to (google.github.io/traceur-compiler)
     8. Add following script in head
 
 ```html
@@ -100,7 +100,50 @@ There are two important Rules, which you need to understand if you're working wi
     1. Modules are always in Strict Mode (no need to define "use strict")
     2. Modules don't have a shared, global Scope. Instead each Module has its own Scope
 
-#### 1.1.1. Javascript overview
+#### 1.1.2. Class
+
+Study about the javascript class
+
+    1. The object making style like ES5
+
+```javascript
+    function Person() {
+        //codes..
+    }
+
+    let person = new Person()
+```
+
+    2. The new style called Class in ES6
+
+```javascript
+    class Person() {
+        greet() {   //If you want to define function, then just like this.
+            console.log('hello');
+        }
+    }
+
+    let person = new Person();
+    person.greet();
+```
+
+    3. Define properties in Class
+
+```javascript
+    class Person() {
+        constructor (name){
+            this.name = name;
+        }
+        greet() {   //If you want to define function, then just like this.
+            console.log('hello, my name is ' + this.name);
+        }
+    }
+
+    let person = new Person('Max'); //Passing Name when make a new class object
+    person.greet();
+
+    console.log(person.__proto__ === Person.prototype); //true. It's pretty same which Class and Prototype.
+```
 
 ## 2. Node JS
 
