@@ -289,7 +289,7 @@ Symbols are part of **meta-programming** programming tools introduced by ES6. It
 
 ```
 
-    2. Well-known symbols
+    3. Well-known symbols
     There are well known symbols already implemented in Javascript like below.
 
 ```javascript
@@ -311,6 +311,141 @@ Symbols are part of **meta-programming** programming tools introduced by ES6. It
         return 999
     }
     console.log(numbers + 1);   //1000
+```
+
+#### 1.1.2. Iterator
+
+    1. Iterator Basics. the way of access to collection.
+
+```javascript
+
+    let array = [1,2,3];
+    console.log(typeof array[Symbol.iterator]); //"function"
+    let it = array[Symbol.itterator]();
+    console.log(it);    //[object Array Iterator]
+    console.log(it.next()); // [object Object] { done: false, value: 1} //Iterator protocol.
+    console.log(it.next()); // [object Object] { done: false, value: 2}
+    console.log(it.next()); // [object Object] { done: false, value: 3}
+    console.log(it.next()); // [object Object] { done: true, value: undefined}
+```
+
+    2. Iterators in Action.
+    It have default behavior instead of just double every thing or whatever.
+
+```javascript
+    let array = [1,2,3];
+
+    array[Symbol.iterator] = function () {
+        let nextValue = 10;
+        return {
+            next: function() {
+                nextValue ++;
+                return {
+                    done: nextValue > 15 ? true : false,
+                    value: nextValue
+                };
+            }
+        };
+    };
+    for (let element of array) {
+        console.log(element);
+    }
+    // 11, 12, 13, 14, 15
+```
+
+    3. Creating a Custom, Iterable Object
+    You can make a customized Object which you want to iterable.
+
+```javascript
+    let person = {
+        name: 'Max',
+        hobbies: ['Sports', 'Cooking'],
+        [Symbol.iterator]: function() {
+            let i = 0;
+            let hobbies = this.hobbies;
+            return {
+                next: function() {
+                    let value = hobbies[i];
+                    i ++;
+                    return {
+                        done: i > hobbies.length ? true : false,
+                        value: 10   //any value
+                    }
+                }
+            };
+        }
+    };
+    for (let hobby of person) {
+        console.log(hobby); 
+    }
+    //  "Sports, Cooking"
+```
+
+    4. Generators Basics
+
+```javascript
+    function *select() {
+        yield 'House';
+        yield 'Garage'; //It's like returns.
+    }
+
+    select();   // empty output.
+    let it = select();
+    console.log(it.next()); //[object Object] { done: false, value: 'House'}
+    console.log(it.next()); //[object Object] { done: false, value: 'Garage'}
+    console.log(it.neXt()); //[object Object] { done: true, value: undefined}
+```
+
+    5. Generators in Action
+
+```javascript
+    let obj = {
+        [Symbol.iterator]: gen  //Reference of gen().
+    }
+    function *gen() {
+        yield 1;
+        yield 2;
+    }
+
+    for (let element of obj) {
+        console.log(element);   //1, 2
+    }
+
+    //way of using dynamic gen
+    function *gen(end) {
+        for(let i = 0; i < end; i ++) {
+            yield i;
+        }
+    }
+    let it = gen(2);
+    console.log(it.next()); //[object Object] { done: false, value: 'House'}
+    console.log(it.next()); //[object Object] { done: false, value: 'Garage'}
+    console.log(it.neXt()); //[object Object] { done: true, value: undefined}
+    console.log(it.neXt()); //[object Object] { done: true, value: undefined}
+
+```
+
+    6. Controlling Iterators with throw and return
+    Handling error and keep going the loop.
+```javascript
+
+    function *gen (end) {
+        for (let i = 0; i < end; i ++){
+            try {
+                yield i;
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    }
+
+    let it = gen(2);
+    console.log(it.next()); // [object Object] { done: false, value: 0}
+    console.log(it.throw('An error ocurred')); // "An error ocurred"  // [object Object] { done: false, value: 1}
+    console.log(it.next()); // [object Object] { done: true, value: undefined} 
+    console.log(it.next()); // [object Object] { done: true, value: undefined}
+
+
 ```
 
 ## 2. Node JS
