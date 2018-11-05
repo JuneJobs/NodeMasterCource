@@ -110,7 +110,6 @@ Study about the javascript class
     function Person() {
         //codes..
     }
-
     let person = new Person()
 ```
 
@@ -122,7 +121,6 @@ Study about the javascript class
             console.log('hello');
         }
     }
-
     let person = new Person();
     person.greet();
 ```
@@ -143,6 +141,108 @@ Study about the javascript class
     person.greet();
 
     console.log(person.__proto__ === Person.prototype); //true. It's pretty same which Class and Prototype.
+```
+
+    4. Inheritance
+
+```javascript
+    class Person {
+        constructor (name) {
+            this.name = name;
+        }
+        greet() {
+            console.log(`Hello, my name is ${this.name} and I am ${this.age}`)
+        }
+    } 
+    class Max extends Person {
+        constructor (age) {
+            super('Max'); // If child class want to use parents class's attribute, It should call parent class's constructor using super() keyword.
+            this.age = age;
+        }
+        greetTwice() {
+            super.greet(); //parent function call "Hello, my name.."
+            this.greet();  //own call "hello"
+        }
+
+        greet() {
+            console.log('hello');
+        }
+    }
+
+    let max = new Max(27);
+
+    max.greet();
+
+```
+
+    5. Static method
+       It is not available use class's function like below
+
+```javascript
+    class Helper {
+        logTwice(message) {
+            console.log(message);
+            console.log(message);
+        }
+    }
+    Helper.logTwice('Logged!');
+```
+
+      It will shows "error" on console. But if you change the function using static like below, then you can use the function. It don't need to make object. It will be super helpful.
+
+```javascript
+    class Helper {
+        static logTwice(message) {
+            console.log(message);
+            console.log(message);
+        }
+    }
+    Helper.logTwice('Logged!'); // "Logged!" "Logged!"
+```
+
+    6. Getter and Setter like ES6 class style
+
+```javascript
+    class Person {
+        constructor (name) {
+            this._name = name;
+        }
+        get name () {
+            return this._name.toUpperCase(); //Can make change every thing we want.
+        }
+        set name (value) {
+            if (value.length > 2) {
+                this._name = value;
+            }
+            console.log("Rejected")
+        }
+    }
+
+    let person = new Pserson('Max');
+    console.log(person._name); //it's not really private but can project more.
+    person.name = 'Anna';
+    console.log(person._name);
+```
+
+    6. Extending Built-in Object
+       "Subclassing": [https://kangax.github.io/compat-table/es6/]
+
+```javascript
+    class ConvertableArray extends Array {
+        convert() {å
+            let returnArray = [];
+            this.forEach(value => returnArray.push('Converted!' + value));
+            return returnArray;
+        }
+    }
+    let numberArray = new ConvertableArray();
+    numberArray.push(1);
+    numberArray.push(2);
+    numberArray.push(3);
+
+    console.log(numberArray.convert());
+    //print ["Converted!1", "Converted!2", "Converted!3"] we can
+
 ```
 
 ## 2. Node JS
