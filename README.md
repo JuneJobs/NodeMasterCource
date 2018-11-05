@@ -1,7 +1,5 @@
 # Language study
 
-test
-
 ## 1. Javascript
 
 * * *
@@ -243,6 +241,76 @@ Study about the javascript class
     console.log(numberArray.convert());
     //print ["Converted!1", "Converted!2", "Converted!3"] we can
 
+```
+
+#### 1.1.2. Symbols
+
+Symbols are part of **meta-programming** programming tools introduced by ES6. Its a new primitive type. It's unique identifier.
+
+    1. Symbol basic
+
+```javascript
+    let symbol = Symbol('debug'); //Symbol Class don't need use 'new' keyword to define a new object.
+    let anotherSymbol = Symbol('debug');
+    console.log(typeof symbol); //'symbol'
+    console.log(symbol === anotherSymbol) //they stand for different unique ID.
+
+    let obj = {
+        name: 'max',
+        [symbol]: 22
+    }
+
+    console.log(obj); // It doesn't pront symbol.
+    console.log(obj[symbol]); //22 <- you can use it when u need to meta-programming.
+
+```
+
+    2. Shared symbols
+
+```javascript
+    let symbol1 = Symbol.for('age');
+    let symbol2 = Symbol.for('age');
+
+    let person = {
+        name: 'Max',
+        age: 30
+    };
+
+    function makeAge(person) {
+        let ageSymbol =Symbol.for('age');
+        //if let ageSymbol = Symbol('age'); -> It will be different.
+        person[ageSymbol] = 27;
+    }
+
+    makeAge(person);
+    console.log(person[symbol1]);   //27
+    console.log(person[symbol2]);   //27
+    console.log(person["age"]);     //30 <- It's not override the properties in class.
+
+```
+
+    2. Well-known symbols
+    There are well known symbols already implemented in Javascript like below.
+
+```javascript
+    class Person {
+
+    }
+    Person.prototype[Sypmbol.toStringTag] = 'Person'
+    let person = new Person();
+    console.log(person);    //[object Object] {... } -> [object Person]
+```
+
+    One more example on MDN page.
+
+```javascript
+
+    let numbers = [1,2,3];
+    console.log(numbers + 1);   //"1,2,31"
+    numbers[Symbol.toPrimitive] = function () {
+        return 999
+    }
+    console.log(numbers + 1);   //1000
 ```
 
 ## 2. Node JS
